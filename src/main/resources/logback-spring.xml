@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<logger name="org.springframework.web" level="INFO" />
+	<logger name="org.springboot.sample" level="TRACE" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <Encoding>UTF-8</Encoding> -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>user_%d{yyyy-M-d}.log
+			</FileNamePattern>
+			<MaxHistory>10</MaxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-M-d HH:mm:ss} %t %p %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+	<springProfile name="dev,qa,uat">
+		<logger name="org.springframework.web" level="INFO" />
+		<logger name="org.springboot.sample" level="INFO" />
+		<logger name="com.timeinc" level="ERROR" />
+	</springProfile>
+
+	<!-- 生产环境. -->
+	<springProfile name="prod">
+		<logger name="org.springframework.web" level="ERROR" />
+		<logger name="org.springboot.sample" level="ERROR" />
+		<logger name="com.timeinc" level="DEBUG">
+			<appender-ref ref="FILE" />
+		</logger>
+	</springProfile>
+</configuration>
